@@ -38,10 +38,12 @@ class KotlinRepository(application: Application) {
 
     inner class InsertTask: AsyncTask<Void,Void,Void>(){
         override fun doInBackground(vararg p0: Void?): Void? {
+            if(dao.checkEmpty().isEmpty()){
                 for(data in dataAarray){
                     var temp = KotlinEntity(data)
                     dao.insertData(temp)
                 }
+            }
             return null
         }
     }

@@ -25,4 +25,7 @@ interface KotlinDao {
     @Query("SELECT * FROM KotlinTable")
     public fun getPagelistData():android.arch.paging.DataSource.Factory<Int,KotlinEntity>
 
+    @Query("DELETE FROM KotlinTable")
+    public fun deleteAll()
+
 }
