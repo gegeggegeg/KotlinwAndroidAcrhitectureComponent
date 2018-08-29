@@ -7,10 +7,13 @@ import android.arch.persistence.room.Room
 import android.os.AsyncTask
 
 class KotlinRepository(application: Application) {
+
     val dataAarray = arrayOf("apple","dog","cat","bear","egg","frog","goat"
             ,"hen","ice","joke","kotlin","lemon","monster","nose","orange","pig","queen","rock","system","team"
             ,"ufo","water","year","xavier","zoo")
+
     private var dao: KotlinDao
+
     init {
         var database: KotlinDataBase = Room.databaseBuilder(application,KotlinDataBase::class.java,"database").build()
         dao = database.KotlinDao()
@@ -18,8 +21,8 @@ class KotlinRepository(application: Application) {
     }
 
     fun initData(){
-            var task = InsertTask()
-            task.execute()
+        var task = InitTask()
+        task.execute()
     }
 
     fun queryLiveData():LiveData<List<KotlinEntity>>{
@@ -29,6 +32,8 @@ class KotlinRepository(application: Application) {
     fun getPagedListLiveData():DataSource.Factory<Int,KotlinEntity> = dao.getPagelistData()
 
     fun insertData(input:String){
+        var task = insertTask()
+        task.execute(input)
     }
 
     fun deleteData(input: String){
@@ -36,7 +41,13 @@ class KotlinRepository(application: Application) {
         task.execute(input)
     }
 
-    inner class InsertTask: AsyncTask<Void,Void,Void>(){
+    fun deleteAllData(){
+        val task = deleteAllTask()
+        task.execute()
+    }
+
+
+    inner class InitTask: AsyncTask<Void,Void,Void>(){
         override fun doInBackground(vararg p0: Void?): Void? {
             if(dao.checkEmpty().isEmpty()){
                 for(data in dataAarray){
@@ -53,6 +64,20 @@ class KotlinRepository(application: Application) {
             dao.deleteData(input.get(0))
             return null
         }
+    }
 
+    inner class insertTask: AsyncTask<String,Void,Void>(){
+        override fun doInBackground(vararg input: String): Void? {
+            var temp = KotlinEntity(input.get(0))
+            dao.insertData(temp)
+            return null
+        }
+    }
+
+    inner class deleteAllTask: AsyncTask<Void,Void,Void>(){
+        override fun doInBackground(vararg p0: Void): Void? {
+            dao.deleteAll()
+            return null
+        }
     }
 }

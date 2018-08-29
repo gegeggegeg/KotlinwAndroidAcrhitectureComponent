@@ -24,4 +24,13 @@ open class KotlinViewModel(application: Application): AndroidViewModel(applicati
     public fun deleteData(input: String){
         mRepository.deleteData(input)
     }
+
+    public fun deleteAllData(){
+        mRepository.deleteAllData()
+    }
+
+    public fun insertData(input: String){
+        mRepository.insertData(input)
+    }
+
 }
